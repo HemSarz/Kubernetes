@@ -5,7 +5,9 @@ $dirstruc = @(
     "website"
 )
 
-$dirstruc | ForEach-Object { 
-    New-Item -ItemType Directory -Path $_ 
-    New-Item -ItemType File -Path "$_/ .gitkeep" -Force | Out-Null
+$dirstruc | ForEach-Object {
+    $gitkeep = "$_/ .gitkeep"
+    if (Test-Path $gitkeep) {
+        Remove-Item $gitkeep -Force
+    }
 }
