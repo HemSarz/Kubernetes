@@ -1,13 +1,11 @@
-$dirstruc = @(
-    ".github/workflows",
+$dir = @(
+    ".githhub/workflows",
     "terraform",
     "k8s",
     "website"
 )
 
-$dirstruc | ForEach-Object {
-    $gitkeep = "$_/ .gitkeep"
-    if (Test-Path $gitkeep) {
-        Remove-Item $gitkeep -Force
-    }
+$dir | ForEach-Object {
+    New-Item -ItemType Directory -Path $_
+    New-Item -ItemType File -Path "$_/ .gitkeep" -Force
 }
