@@ -24,16 +24,16 @@ jobs:
           -p ${{ secrets.ARM_CLIENT_SECRET }} \
           --tenant ${{ secrets.ARM_TENANT_ID }}
       - name: Initialize Terraform
-        working-directory: ./terraform
+        working-directory: ./terraform/fic
         run: terraform init
       - name: Validate Terraform Code
-        working-directory: ./terraform
+        working-directory: ./terraform/fic
         run: terraform validate
       - name: Terraform Plan
-        working-directory: ./terraform
+        working-directory: ./terraform/fic
         run: terraform plan
       - name: Apply FIC Configuration
-        working-directory: ./terraform
+        working-directory: ./terraform/fic
         run: terraform apply -auto-approve
       - name: Install GitHub CLI
         run: |
