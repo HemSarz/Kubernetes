@@ -1,6 +1,6 @@
 resource "azuread_application_registration" "tfazspn" {
   display_name     = data.azuread_application.tfazspn.display_name
-  sign_in_audience = "${var.prefix}-var.sign_in_audience-${var.env}"
+  sign_in_audience = "AzureADMyOrg"
 }
 
 
