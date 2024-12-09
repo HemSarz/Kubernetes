@@ -60,7 +60,7 @@ variable "gh_repo_name" {
   default = "kubernetes"
 }
 
-variable "branches" {
+variable "gh_branches" {
   type    = list(string)
   default = ["main", "feat", "release"]
 }
@@ -68,5 +68,4 @@ variable "branches" {
 variable "gh_env" {
   type    = list(string)
   default = ["dev", "prod", "qa"]
-
 }
