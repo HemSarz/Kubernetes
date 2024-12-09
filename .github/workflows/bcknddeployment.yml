@@ -1,0 +1,52 @@
+name: Deploy backend for TF State
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Deploy:
+    name: Deploy TF State to backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+
+      - name: Azure login
+        run: |
+          set -a
+          source .env.backend
+          az login --service-principal \
+            -u ${{ secrets.ARM_CLIENT_ID }} \
+            -p ${{ secrets.ARM_CLIENT_SECRET }} \
+            --tenant ${{ secrets.ARM_TENANT_ID }}
+
+      - name: Create Resource Group
+        run: |
+          set -a
+          source .env.backend
+          az group create \
+            -l $TF_VAR_location \
+            -n $TF_VAR_state_resource_group_name
+
+      - name: Create Storage Account
+        run: |
+          set -a
+          source .env.backend
+          az storage account create \
+            -n $TF_VAR_state_storage_account_name \
+            -g $TF_VAR_state_resource_group_name \
+            -l $TF_VAR_location \
+            --sku Standard_LRS \
+            --allow-blob-public-access false
+
+      - name: Create STG Container
+        run: |
+          set -a
+          source .env.backend
+          az storage container create \
+            --name $TF_VAR_state_storage_account_container_name \
+            --account-name $TF_VAR_state_storage_account_name
