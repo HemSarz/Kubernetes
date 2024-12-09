@@ -1,9 +1,3 @@
-resource "azuread_application_registration" "tfazspn" {
-  display_name     = data.azuread_application.tfazspn.display_name
-  sign_in_audience = "AzureADMyOrg"
-}
-
-
 resource "azuread_application_federated_identity_credential" "branches" {
   for_each       = toset(var.gh_branches)
   application_id = data.azuread_application.tfazspn.id
