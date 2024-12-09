@@ -36,6 +36,5 @@ terraform.rc
 
 #txt files
 *.txt
-*.ps1
 *.json
 credentials.json
