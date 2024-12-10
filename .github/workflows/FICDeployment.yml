@@ -39,10 +39,5 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gh
-      - name: Authenticate GitHub CLI
-        env:
-          GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        run: |
-          echo $GH_TOKEN | gh auth login --with-token
-      - name: Remove Temporary Azure Credentials Secret
+      - name: Remove ClientSecret
         run: gh secret delete ARM_CLIENT_SECRET --env dev
