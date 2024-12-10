@@ -45,4 +45,4 @@ jobs:
       run: terraform apply -auto-approve
 
     - name: Remove ClientSecret
-      run: gh secret delete ARM_CLIENT_SECRET --env dev
+      run: gh secret delete "${{ env.CLIENT_SECRET_NAME }}" --env "${{ env.ENV_NAME }}"
