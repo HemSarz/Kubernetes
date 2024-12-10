@@ -47,7 +47,7 @@ variable "application_display_name" {
 
 variable "fic_display_name" {
   type    = string
-  default = "github-actions-fic-main"
+  default = "github-actions-fic"
 }
 
 variable "gh_org_name" {
