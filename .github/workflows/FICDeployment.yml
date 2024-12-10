@@ -1,43 +1,48 @@
 name: Setup Federated Identity Credential
 'on':
   workflow_dispatch:
-  
+
+
 permissions:
   id-token: write
   contents: read
   actions: write
+
 jobs:
   setup-fic:
     runs-on: ubuntu-latest
     environment: Dev
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.10.1
-      - name: Authenticate with Azure
-        run: |
-          az login --service-principal \
-          -u ${{ secrets.ARM_CLIENT_ID }} \
-          -p ${{ secrets.ARM_CLIENT_SECRET }} \
-          --tenant ${{ secrets.ARM_TENANT_ID }}
-      - name: Initialize Terraform
-        working-directory: ./terraform/fic
-        run: terraform init
-      - name: Validate Terraform Code
-        working-directory: ./terraform/fic
-        run: terraform validate
-      - name: Terraform Plan
-        working-directory: ./terraform/fic
-        run: terraform plan
-      - name: Apply FIC Configuration
-        working-directory: ./terraform/fic
-        run: terraform apply -auto-approve
-      - name: Install GitHub CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gh
-      - name: Remove ClientSecret
-        run: gh secret delete ARM_CLIENT_SECRET --env dev
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.10.1
+    - name: Authenticate with Azure
+      run: |
+        az login --service-principal \
+        -u ${{ secrets.ARM_CLIENT_ID }} \
+        -p ${{ secrets.ARM_CLIENT_SECRET }} \
+        --tenant ${{ secrets.ARM_TENANT_ID }}
+
+    - name: Initialize Terraform
+      working-directory: ./terraform/fic
+      run: terraform init
+
+    - name: Validate Terraform Code
+      working-directory: ./terraform/fic
+      run: terraform validate
+
+    - name: Terraform Plan
+      working-directory: ./terraform/fic
+      run: terraform plan
+
+    - name: Apply FIC Configuration
+      working-directory: ./terraform/fic
+      run: terraform apply -auto-approve
+
+    - name: Remove ClientSecret
+      run: gh secret delete ARM_CLIENT_SECRET --env dev
