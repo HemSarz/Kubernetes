@@ -7,13 +7,7 @@ $permissions = @{
 $fields = @("appId", "id")
 $backend_spn = "tfazspn"
 
-$spninfo = @{ }
-foreach ($field in $fields) {
-    $spninfo[$field] = az ad sp show --id $(az ad sp list --display-name $backend_spn --query [0].appId -o tsv) --query $field -o tsv
-}
-
-$backend_SPNappId = $spninfo["appId"]
-$backend_SPNObjId = $spninfo["id"]
+$backend_SPNappId = (az ad sp list --display-name $backend_spn --query [0].appId -o tsv)
 
 Write-Host "Assign SPN AD Permissions..." -ForegroundColor Yellow
 
@@ -30,7 +24,7 @@ foreach ($permission in $permissions.GetEnumerator()) {
         --id $backend_SPNappId `
         --api $MSGraphApi `
         --scope $permission.Value `
-        -o table    
+        -o table
 }
 
 Start-Sleep 20
