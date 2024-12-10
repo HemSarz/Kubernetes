@@ -4,7 +4,7 @@ resource "azuread_application_federated_identity_credential" "branches" {
   display_name   = "${var.prefix}-${var.fic_display_name}-${each.value}"
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://token.actions.githubusercontent.com"
-  subject        = "repo:${var.gh_org_name}/${var.gh_repo_name}:ref:refs/heads/{each.value}"
+  subject        = "repo:${var.gh_org_name}/${var.gh_repo_name}:ref:refs/heads/${each.value}"
 }
 
 resource "azuread_application_federated_identity_credential" "env" {
