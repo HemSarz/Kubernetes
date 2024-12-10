@@ -1,4 +1,4 @@
-name: Setup Federated Identity Credential
+name: Deploy Federated Identity Credential
 'on':
   workflow_dispatch:
 
