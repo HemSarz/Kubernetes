@@ -1,5 +1,5 @@
 name: Deploy Federated Identity Credential
-'on':
+on:
   workflow_dispatch:
 
 
@@ -21,6 +21,7 @@ jobs:
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: 1.10.1
+
     - name: Authenticate with Azure
       run: |
         az login --service-principal \
@@ -44,7 +45,7 @@ jobs:
       working-directory: ./terraform/fic
       run: terraform apply -auto-approve
 
-    - name: Remove ClientSecret
+    - name: Remove ARM_CLIENT_SECRET
+      run: gh secret delete ARM_CLIENT_SECRET --env "${{ env.ENV_NAME }}"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh secret delete "${{ env.CLIENT_SECRET_NAME }}" --env "${{ env.ENV_NAME }}"
