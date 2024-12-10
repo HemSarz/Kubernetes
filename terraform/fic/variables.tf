@@ -45,9 +45,14 @@ variable "application_display_name" {
   default = "tfazspn"
 }
 
-variable "fic_display_name" {
+variable "fic_display_name_env" {
   type    = string
-  default = "github-actions-fic"
+  default = "github-actions-fic-env"
+}
+
+variable "fic_display_name_branch" {
+  type    = string
+  default = "github-actions-fic-branch"
 }
 
 variable "gh_org_name" {
