@@ -4,7 +4,6 @@ $permissions = @{
     "Application.ReadWrite.All" = "1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9=Role"
 }
 
-$fields = @("appId", "id")
 $backend_spn = "tfazspn"
 
 $backend_SPNappId = (az ad sp list --display-name $backend_spn --query [0].appId -o tsv)
