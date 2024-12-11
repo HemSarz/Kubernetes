@@ -1,4 +1,4 @@
-name: Deploy Federated Identity Credential
+name: Destroy gh secret
 on:
   workflow_dispatch:
 
