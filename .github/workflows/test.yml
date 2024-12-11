@@ -1,4 +1,4 @@
-name: Destroy gha secret
+name: Destroy GHA Secret
 on:
   workflow_dispatch:
 
@@ -19,7 +19,6 @@ jobs:
         gh api --method DELETE \
         -H "Accept: application/vnd.github+json" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
-        -H "Authorization: bearer ${{ secrets.dlsec }}" \
         https://api.github.com/repos/hemsarz/kubernetes/environments/Dev/secrets/ARM_CLIENT_SECRET
-        env:
-        GH_TOKEN: ${{ github.token }}
+      env:
+        GH_TOKEN: ${{ secrets.dlsec }}
