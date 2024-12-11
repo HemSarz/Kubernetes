@@ -7,11 +7,7 @@ on:
         required: true
         default: 'Dev'
 
-permissions:
-  id-token: write
-  contents: write
-  actions: write
-
+permissions: write-all
 jobs:
   setup-fic:
     runs-on: ubuntu-latest
