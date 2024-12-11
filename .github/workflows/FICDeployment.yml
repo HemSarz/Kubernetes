@@ -1,7 +1,11 @@
 name: Deploy Federated Identity Credential
 on:
   workflow_dispatch:
-
+    inputs:
+      environment_name:
+        description: 'The environment name'
+        required: true
+        default: 'Dev'
 
 permissions:
   id-token: write
@@ -11,7 +15,7 @@ permissions:
 jobs:
   setup-fic:
     runs-on: ubuntu-latest
-    environment: Dev
+    environment: ${{ github.event.inputs.environment_name }}
 
     steps:
     - name: Checkout Repository
@@ -45,7 +49,10 @@ jobs:
       working-directory: ./terraform/fic
       run: terraform apply -auto-approve
 
-    - name: Remove ARM_CLIENT_SECRET
-      run: gh secret delete ARM_CLIENT_SECRET --env "${{ env.ENV_NAME }}"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Remove ARM_CLIENT_SECRET using GitHub CLI API
+      run: |
+        gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+        gh api --method DELETE \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/${{ github.repository }}/environments/${{ github.event.inputs.environment_name }}/secrets/ARM_CLIENT_SECRET
