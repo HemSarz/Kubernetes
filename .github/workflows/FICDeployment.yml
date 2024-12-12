@@ -43,6 +43,3 @@ jobs:
     - name: Apply FIC Configuration
       working-directory: ./terraform/fic
       run: terraform apply -auto-approve
-
-    - name: Use local destroy-gh-sec
-      uses: ./.github/workflows/destroy-gh-sec
