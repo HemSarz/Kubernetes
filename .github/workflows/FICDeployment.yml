@@ -1,5 +1,5 @@
 name: Deploy Federated Identity Credential
-on:
+'on':
   workflow_dispatch:
 
 
@@ -11,16 +11,16 @@ permissions:
 jobs:
   setup-fic:
     runs-on: ubuntu-latest
+    environment: Dev
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: 1.10.1
-
     - name: Authenticate with Azure
       run: |
         az login --service-principal \
@@ -43,8 +43,3 @@ jobs:
     - name: Apply FIC Configuration
       working-directory: ./terraform/fic
       run: terraform apply -auto-approve
-
-    - name: Checkout repo
-      uses: actions/checkout@v4
-    - name: Use local destroy-gh-sec
-      uses: ./.github/workflows/destroy-gh-sec
