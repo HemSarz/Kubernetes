@@ -1,6 +1,6 @@
 name: Deploy Federated Identity Credential
 on:
-  workflow_call:
+  workflow_dispatch:
 
 
 permissions: write-all
