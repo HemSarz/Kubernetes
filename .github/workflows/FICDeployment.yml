@@ -2,32 +2,24 @@ name: Deploy Federated Identity Credential
 
 on:
   workflow_dispatch:
-    inputs:
-      environment_name:
-        description: 'The environment name'
-        required: true
-        default: 'dev'
 
 jobs:
   setup-fic:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout
       uses: actions/checkout@v4
 
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
+      uses: hashicorp/setup-terraform@v3.1.2
       with:
         terraform_version: 1.10.1
 
     - name: Authenticate with Azure
-      run: |
-        az login --service-principal \
-          -u ${{ secrets.ARM_CLIENT_ID }} \
-          -p ${{ secrets.ARM_CLIENT_SECRET }} \
-          --tenant ${{ secrets.ARM_TENANT_ID }}
-
+      uses: ARM/login@v1
+      with:
+        creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'
     - name: Initialize Terraform
       working-directory: ./terraform/fic
       run: terraform init
