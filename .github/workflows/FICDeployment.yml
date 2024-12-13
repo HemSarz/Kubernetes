@@ -1,35 +1,45 @@
 name: Deploy Federated Identity Credential
-'on':
-  workflow_dispatch: null
-permissions:
-  id-token: write
-  contents: read
-  actions: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment_name:
+        description: 'The environment name'
+        required: true
+        default: 'dev'
+
 jobs:
   setup-fic:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.10.1
-      - name: Authenticate with Azure
-        run: |
-          az login --service-principal \
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.10.1
+
+    - name: Authenticate with Azure
+      run: |
+        az login --service-principal \
           -u ${{ secrets.ARM_CLIENT_ID }} \
           -p ${{ secrets.ARM_CLIENT_SECRET }} \
           --tenant ${{ secrets.ARM_TENANT_ID }}
-      - name: Initialize Terraform
-        working-directory: ./terraform/fic
-        run: terraform init
-      - name: Validate Terraform Code
-        working-directory: ./terraform/fic
-        run: terraform validate
-      - name: Terraform Plan
-        working-directory: ./terraform/fic
-        run: terraform plan
-      - name: Apply FIC Configuration
-        working-directory: ./terraform/fic
-        run: terraform apply -auto-approve
+
+    - name: Initialize Terraform
+      working-directory: ./terraform/fic
+      run: terraform init
+
+    - name: Validate Terraform Code
+      working-directory: ./terraform/fic
+      run: terraform validate
+
+    - name: Terraform Plan
+      working-directory: ./terraform/fic
+      run: terraform plan
+
+    - name: Apply FIC Configuration
+      working-directory: ./terraform/fic
+      run: terraform apply -auto-approve
