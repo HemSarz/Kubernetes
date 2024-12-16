@@ -38,3 +38,4 @@ terraform.rc
 *.txt
 *.json
 credentials.json
+*.ps1
