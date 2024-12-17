@@ -1,12 +1,15 @@
 name: Deploy backend for TF State
+
 on:
   workflow_dispatch:
+
 permissions:
   id-token: write
   contents: read
+
 jobs:
-  Deploy:
-    name: Deploy TF State to backend
+  Build:
+    name: Build TF State
     runs-on: ubuntu-latest
     environment: Dev
     defaults:
@@ -23,6 +26,15 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+  Deploy:
+    name: Deploy TF State to backend
+    runs-on: ubuntu-latest
+    needs: Build  # This ensures Deploy runs after Build
+    environment: Dev
+    defaults:
+      run:
+        shell: bash
+    steps:
       - name: Load environment variables
         run: |
           set -a
