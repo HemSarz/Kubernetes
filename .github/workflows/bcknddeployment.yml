@@ -5,39 +5,48 @@ jobs:
   Deploy:
     name: Deploy TF State to backend
     runs-on: ubuntu-latest
+    environment: Dev
     defaults:
       run:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v4
+
       - name: Azure login
-        uses: azure/login@v2
+        uses: azure/login@v2.2.0
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: Create Resource Group
+
+      - name: Load environment variables
         run: |
           set -a
           source .env.backend
+          set +a
+
+      - name: Create Resource Group
+        run: |
           az group create \
             -l $TF_VAR_location \
             -n $TF_VAR_state_resource_group_name
+
       - name: Create Storage Account
         run: |
-          set -a
-          source .env.backend
           az storage account create \
             -n $TF_VAR_state_storage_account_name \
             -g $TF_VAR_state_resource_group_name \
             -l $TF_VAR_location \
             --sku Standard_LRS \
             --allow-blob-public-access false
-      - name: Create STG Container
+
+      - name: Create Storage Container
         run: |
-          set -a
-          source .env.backend
           az storage container create \
             --name $TF_VAR_state_storage_account_container_name \
-            --account-name $TF_VAR_state_storage_account_name
+            --account-name $TF_VAR_state_storage_account_name \
+            --account-key $(az storage account keys list \
+            --resource-group $TF_VAR_state_resource_group_name \
+            --account-name $TF_VAR_state_storage_account_name \
+            --query '[0].value' -o tsv)
