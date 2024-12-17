@@ -1,5 +1,5 @@
 name: Deploy backend for TF State
-'on':
+on:
   workflow_call:
 jobs:
   Deploy:
