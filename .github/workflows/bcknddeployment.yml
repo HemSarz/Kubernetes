@@ -1,6 +1,6 @@
 name: Deploy backend for TF State
 on:
-  workflow_call:
+  workflow_dispatch:
 jobs:
   Deploy:
     name: Deploy TF State to backend
