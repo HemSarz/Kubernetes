@@ -1,12 +1,9 @@
 name: Destroy gh secret
 on:
-  workflow_dispatch:
-
-
-permissions:
-  actions: write
-  contents: write
-
+  workflow_run:
+    workflows: [ "Deploy Federated Identity Credential" ]
+    types:
+    - completed
 jobs:
   setup-fic:
     runs-on: ubuntu-latest
@@ -24,4 +21,3 @@ jobs:
         -H "Accept: application/vnd.github+json" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
         /repos/hemsarz/kubernetes/environments/Dev/secrets/ARM_CLIENT_SECRET
-

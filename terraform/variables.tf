@@ -5,7 +5,7 @@ variable "prefix" {
 
 variable "rgName" {
   type    = string
-  default = "tfaz-rg"
+  default = "tfaz-resume-rg"
 }
 
 variable "location" {
@@ -15,7 +15,7 @@ variable "location" {
 
 variable "env" {
   type    = string
-  default = "dev"
+  default = "prod"
 }
 
 variable "account_tier" {
