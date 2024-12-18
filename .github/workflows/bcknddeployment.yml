@@ -1,10 +1,15 @@
 name: Deploy backend for TF State
-on:
-  workflow_dispatch:
+'on':
+  workflow_run:
+    workflows: ["Destroy gh secret"]
+    types:
+      - completed
+
 permissions:
   id-token: write
   contents: read
   actions: write
+
 jobs:
   Build:
     name: Build TF State
@@ -16,12 +21,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Azure login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
   Deploy:
     name: Deploy TF State to backend
     runs-on: ubuntu-latest
@@ -36,11 +43,13 @@ jobs:
           set -a
           source .env.backend
           set +a
+
       - name: Create Resource Group
         run: |
           az group create \
             -l $TF_VAR_location \
             -n $TF_VAR_state_resource_group_name
+
       - name: Create Storage Account
         run: |
           az storage account create \
@@ -49,6 +58,7 @@ jobs:
             -l $TF_VAR_location \
             --sku Standard_LRS \
             --allow-blob-public-access false
+
       - name: Create Storage Container
         run: |
           az storage container create \
