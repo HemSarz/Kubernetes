@@ -11,6 +11,7 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Azure login
         uses: azure/login@v2
@@ -24,4 +25,4 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            az account show
+            az version
