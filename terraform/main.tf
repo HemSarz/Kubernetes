@@ -46,6 +46,23 @@ resource "azurerm_cosmosdb_account" "cosmos" {
   }
 }
 
+
+resource "azurerm_cosmosdb_sql_database" "cosmos_sql" {
+  name                = "ResumeDB"
+  resource_group_name = azurerm_resource_group.rg.name
+  account_name        = azurerm_cosmosdb_account.cosmos.name
+}
+
+resource "azurerm_cosmosdb_sql_container" "visits" {
+  name                   = "Visits"
+  resource_group_name    = azurerm_resource_group.rg.name
+  account_name           = azurerm_cosmosdb_account.cosmos.name
+  database_name          = azurerm_cosmosdb_sql_database.cosmos_sql.name
+  partition_key_paths     = "/id"
+  throughput             = 400
+}
+
+
 # Azure AD B2C
 resource "azurerm_app_service" "b2c_auth" {
   name                = "${var.prefix}-${var.b2c_auth_name}"
@@ -59,3 +76,4 @@ resource "azurerm_dns_zone" "dns" {
   name                = "hemensarzalihotmail.onmicrosoft.com"
   resource_group_name = azurerm_resource_group.rg.name
 }
+

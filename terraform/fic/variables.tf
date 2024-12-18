@@ -57,12 +57,12 @@ variable "fic_display_name_branch" {
 
 variable "gh_org_name" {
   type    = string
-  default = "hemsarz"
+  default = "HemSarz"
 }
 
 variable "gh_repo_name" {
   type    = string
-  default = "kubernetes"
+  default = "Kubernetes"
 }
 
 variable "gh_branches" {
