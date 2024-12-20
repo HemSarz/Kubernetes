@@ -1,4 +1,4 @@
-name: Deploy backend for TF State
+name: Deploy backend for Terraform State
 'on':
   workflow_run:
     workflows: ["Destroy gh secret"]
