@@ -3,10 +3,7 @@ name: Setup Federated Identity Credential
   workflow_dispatch:
 
 permissions:
-  id-token: write
   contents: read
-  actions: write
-
 jobs:
   DeployFic:
     runs-on: ubuntu-latest
