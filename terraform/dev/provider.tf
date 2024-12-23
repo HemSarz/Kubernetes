@@ -5,25 +5,28 @@ terraform {
     container_name       = "tfstatebcknd"
     key                  = "tfstatebcknd"
   }
-}
 
+  required_providers {
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.6.3"
+    }
 
-required_providers {
-  random = {
-    source  = "hashicorp/random"
-    version = ">= 3.6.3"
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "2.50.0"
+    }
+
+    github = {
+      source  = "integrations/github"
+      version = "6.2.1"
+    }
+
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 3.75.0"
+    }
   }
-
-  azuread = {
-    source  = "hashicorp/azuread"
-    version = "2.50.0"
-  }
-
-  github = {
-    source  = "integrations/github"
-    version = "6.2.1"
-  }
-
 }
 
 provider "azurerm" {
