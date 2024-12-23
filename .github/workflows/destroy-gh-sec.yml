@@ -6,8 +6,6 @@ on:
 permissions:
   contents: read
   actions: write
-  secrets: write
-  environments: write
 
 jobs:
   DestroySecret:
