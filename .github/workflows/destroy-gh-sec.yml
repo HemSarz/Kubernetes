@@ -1,10 +1,7 @@
 name: Destroy gh secret
 
 on:
-  workflow_run:
-    workflows: ["Setup Federated Identity Credential"]
-    types:
-      - completed
+  workflow_dispatch:
 
 permissions:
   contents: read
