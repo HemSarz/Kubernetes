@@ -67,5 +67,4 @@ jobs:
             --account-name $TF_VAR_state_storage_account_name \
             --account-key $(az storage account keys list \
             --resource-group $TF_VAR_state_resource_group_name \
-            --account-name $TF_VAR_state_storage_account_name \
-            --query [0].value -o tsv)
+            --account-name $TF_VAR_state_storage_account_name
