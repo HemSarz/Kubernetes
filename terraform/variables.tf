@@ -5,7 +5,7 @@ variable "prefix" {
 
 variable "rgName" {
   type    = string
-  default = "tfaz-resume-rg"
+  default = "tfaz-rg"
 }
 
 variable "location" {
@@ -15,65 +15,7 @@ variable "location" {
 
 variable "env" {
   type    = string
-  default = "prod"
-}
-
-# AKS Cluster Configuration
-variable "aks_name" {
-  type        = string
-  description = "Name for the AKS Cluster"
-  default     = "resume-aks"
-}
-
-variable "aks_dns_prefix" {
-  type        = string
-  description = "DNS prefix for the AKS Cluster"
-  default     = "resume"
-}
-
-variable "aks_node_pool_name" {
-  type        = string
-  description = "Name for the default node pool in AKS"
-  default     = "default"
-}
-
-variable "aks_node_count" {
-  type        = number
-  description = "Number of nodes in the default node pool"
-  default     = 2
-}
-
-variable "aks_node_size" {
-  type        = string
-  description = "Size of the nodes in the default node pool"
-  default     = "Standard_DS2_v2"
-}
-
-# Cosmos DB Configuration
-variable "cosmos_db_name" {
-  type        = string
-  description = "Name for the Cosmos DB account"
-  default     = "resume-db"
-}
-
-variable "cosmos_db_offer_type" {
-  type        = string
-  description = "Offer type for the Cosmos DB account (e.g., Standard, Free)"
-  default     = "Standard"
-}
-
-# Azure AD B2C Configuration
-variable "b2c_auth_name" {
-  type        = string
-  description = "Name for the Azure AD B2C application"
-  default     = "resume-auth"
-}
-
-# Azure DNS Configuration
-variable "dns_zone_name" {
-  type        = string
-  description = "Custom domain name for Azure DNS"
-  default     = "<replace-with-your-domain>"
+  default = "dev"
 }
 
 variable "account_tier" {
@@ -94,4 +36,41 @@ variable "sku_name" {
 variable "admin_username" {
   type    = string
   default = "adminuser"
+}
+
+# Federeated Acces VBs
+
+variable "application_display_name" {
+  type    = string
+  default = "tfazspn"
+}
+
+variable "fic_display_name_env" {
+  type    = string
+  default = "github-actions-fic-env"
+}
+
+variable "fic_display_name_branch" {
+  type    = string
+  default = "github-actions-fic-branch"
+}
+
+variable "gh_org_name" {
+  type    = string
+  default = "HemSarz"
+}
+
+variable "gh_repo_name" {
+  type    = string
+  default = "Kubernetes"
+}
+
+variable "gh_branches" {
+  type    = list(string)
+  default = ["main", "feat", "release"]
+}
+
+variable "gh_env" {
+  type    = list(string)
+  default = ["Dev", "prod", "qa"]
 }
