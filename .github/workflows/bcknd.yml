@@ -25,19 +25,20 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-
-      - name: Create Resource Group
+      - name: Load environment variables
         run: |
           set -a
           source .env.backend
+          set +a
+
+      - name: Create Resource Group
+        run: |
           az group create \
             -l $TF_VAR_location \
             -n $TF_VAR_state_resource_group_name
 
       - name: Create Storage Account
         run: |
-          set -a
-          source .env.backend
           az storage account create \
             -n $TF_VAR_state_storage_account_name \
             -g $TF_VAR_state_resource_group_name \
@@ -47,8 +48,6 @@ jobs:
 
       - name: Create STG Container
         run: |
-          set -a
-          source .env.backend
           az storage container create \
             --name $TF_VAR_state_storage_account_container_name \
             --account-name $TF_VAR_state_storage_account_name
