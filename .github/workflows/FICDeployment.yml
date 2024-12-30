@@ -23,13 +23,20 @@ jobs:
       
       - name: Verify WorkingDir
         run: pwd && ls -al ./terraform/fic
+
+      - name: GH Identity
+        run: |
+          git config --global user.email "${{ secrets.GHUSEREMAIL }}"
+          git config --global user.name "${{ secrets.GHUSER }}"
         
       - name: Create PLAN Directory
         run: |
+          if [ ! -d "./terraform/fic/plans" ]; then
           mkdir -p ./terraform/fic/plans
           git add ./terraform/fic/plans
           git commit -m "Create PLAN Directory"
           git diff --cached --quiet || (git commit -m "Create PLAN Directory" && git push)
+          fi
 
       - name: Initialize Terraform
         working-directory: ./terraform/fic
