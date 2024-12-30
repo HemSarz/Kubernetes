@@ -1,4 +1,4 @@
-name: Deploy backend for Terraform State
+name: TF BACKEND
 'on':
   workflow_dispatch:
 
