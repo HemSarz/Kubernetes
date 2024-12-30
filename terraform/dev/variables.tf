@@ -3,9 +3,14 @@ variable "prefix" {
   default = "tfaz-k8s"
 }
 
+variable "prefix_stg" {
+  type    = string
+  default = "tfazk8s"
+}
+
 variable "rgName" {
   type    = string
-  default = "tfaz-rg"
+  default = "rg"
 }
 
 variable "location" {
@@ -73,4 +78,67 @@ variable "gh_branches" {
 variable "gh_env" {
   type    = list(string)
   default = ["Dev", "prod", "qa"]
+}
+
+# Key Vault
+variable "kvname" {
+  type    = string
+  default = "kv"
+}
+
+variable "kv_sku_name" {
+  type    = string
+  default = "standard"
+}
+
+# StorageAccount
+variable "stgname" {
+  type    = string
+  default = "stg"
+}
+
+variable "container_name" {
+  type    = string
+  default = "cont"
+}
+
+variable "container_access_type" {
+  type    = string
+  default = "private"
+}
+# k8s
+variable "aksname" {
+  description = "Name of the AKS cluster"
+  type        = string
+  default     = "aks"
+}
+
+variable "k8s_version" {
+  description = "Kubernetes version for the AKS cluster"
+  type        = string
+  default     = "1.19.7"
+}
+
+variable "node_count" {
+  description = "Number of nodes in the AKS cluster"
+  type        = string
+  default     = "1"
+}
+
+variable "node_vm_size" {
+  description = "VM size for the nodes in the AKS cluster"
+  type        = string
+  default     = "Standard_B2s"
+}
+
+variable "load_balancer_sku" {
+  description = "SKU of the load balancer"
+  type        = string
+  default     = "standard"
+
+}
+variable "default_node_pool_name" {
+  description = "Name of the default node pool"
+  type        = string
+  default     = "primary"
 }

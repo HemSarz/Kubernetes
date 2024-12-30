@@ -60,11 +60,8 @@ jobs:
             --sku Standard_LRS \
             --allow-blob-public-access false
 
-      - name: Create Storage Container
+      - name: Create STG Container
         run: |
           az storage container create \
             --name $TF_VAR_state_storage_account_container_name \
-            --account-name $TF_VAR_state_storage_account_name \
-            --account-key $(az storage account keys list \
-            --resource-group $TF_VAR_state_resource_group_name \
             --account-name $TF_VAR_state_storage_account_name

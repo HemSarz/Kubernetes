@@ -1,9 +1,10 @@
-name: Setup Federated Identity Credential
-'on':
+name: Deploy Azure Infrastructure
+
+on:
   workflow_dispatch:
 
 jobs:
-  DeployOIDC:
+  DeployInfra:
     runs-on: ubuntu-latest
     environment: Dev
     steps:
@@ -15,13 +16,15 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Az login
-        uses: azure/login@v2.2.0
+      - name: Azure login
+        uses: azure/login@v2
         with:
-          creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
-     
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Create PLAN Directory
-        run: mkdir -p ./terraform/dev/plans
+        run: mkdir -p ./terraform/dev/infraplans
 
       - name: Initialize Terraform
         working-directory: ./terraform/dev
@@ -33,7 +36,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./terraform/dev
-        run: terraform plan -out=./plans/plan.tfplan | tee ./plans/plan_output.txt
+        run: terraform plan -out=./infraplans/plan.tfplan | tee ./infraplans/plan_output.txt
 
       - name: Debug Plan Files
         run: ls -al ./terraform/dev/plans
@@ -41,9 +44,9 @@ jobs:
       - name: Plan Summary
         uses: sgametrio/terraform-summary-action@main
         with:
-          log-file: ./terraform/dev/plans/plan_output.txt
-          title: "Terraform Plan Summary" 
+          log-file: ./terraform/dev/infraplans/plan_output.txt
+          title: "Terraform Plan Summary"
 
       - name: Apply FIC Configuration
         working-directory: ./terraform/dev
-        run: terraform apply -auto-approve ./plans/plan.tfplan
+        run: terraform apply -auto-approve ./infraplans/plan.tfplan
