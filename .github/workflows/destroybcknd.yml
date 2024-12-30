@@ -1,4 +1,4 @@
-name: Deploy backend for Terraform State
+name: Destroy backend for Terraform State
 'on':
   workflow_dispatch:
 
@@ -11,7 +11,6 @@ jobs:
   prepare-destroy:
     name: Prepare Destroy
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
     environment: Dev
     defaults:
       run:
