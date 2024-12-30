@@ -1,0 +1,104 @@
+name: Deploy backend for Terraform State
+'on':
+  workflow_run:
+    workflows: ["Setup Federated Identity Credential"]
+    types:
+      - completed
+
+permissions:
+  id-token: write
+  contents: read
+  actions: write
+
+jobs:
+  prepare-destroy:
+    name: Prepare Destroy
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    environment: Dev
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  perform-destroy:
+    name: Perform Destroy
+    runs-on: ubuntu-latest
+    needs: prepare-destroy
+    environment: Dev
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Load environment variables
+        working-directory: ./terraform/dev
+        run: |
+          set -a
+          source .env.backend
+          set +a
+          # Validate required variables are loaded
+          if [ -z "$TF_VAR_state_resource_group_name" ] || 
+             [ -z "$TF_VAR_state_storage_account_name" ] || 
+             [ -z "$TF_VAR_state_storage_account_container_name" ]; then
+            echo "One or more required environment variables are missing!"
+            exit 1
+          fi
+
+      - name: Validate Resource Group existence
+        working-directory: ./terraform/dev
+        run: |
+          if ! az group exists -n $TF_VAR_state_resource_group_name; then
+            echo "Resource Group $TF_VAR_state_resource_group_name does not exist. Skipping deletion."
+            exit 0
+          fi
+
+      - name: Delete Resource Group
+        working-directory: ./terraform/dev
+        run: |
+          az group delete \
+            -n $TF_VAR_state_resource_group_name \
+            --yes
+
+      - name: Validate Storage Account existence
+        working-directory: ./terraform/dev
+        run: |
+          if ! az storage account check-name -n $TF_VAR_state_storage_account_name --query "nameAvailable" | grep -q false; then
+            echo "Storage Account $TF_VAR_state_storage_account_name does not exist. Skipping deletion."
+            exit 0
+          fi
+
+      - name: Delete Storage Account
+        working-directory: ./terraform/dev
+        run: |
+          az storage account delete \
+            -n $TF_VAR_state_storage_account_name \
+            -g $TF_VAR_state_resource_group_name \
+            --yes
+
+      - name: Validate STG Container existence
+        working-directory: ./terraform/dev
+        run: |
+          if ! az storage container exists \
+              --name $TF_VAR_state_storage_account_container_name \
+              --account-name $TF_VAR_state_storage_account_name \
+              --query "exists" | grep -q true; then
+            echo "Storage container $TF_VAR_state_storage_account_container_name does not exist. Skipping deletion."
+            exit 0
+          fi
+
+      - name: Delete STG Container
+        working-directory: ./terraform/dev
+        run: |
+          az storage container delete \
+            --name $TF_VAR_state_storage_account_container_name \
+            --account-name $TF_VAR_state_storage_account_name \
+            --yes
