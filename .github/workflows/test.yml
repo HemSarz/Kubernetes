@@ -39,7 +39,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: LS
-        run: ls -al
+        run: |
+         pwd
+         ls -al
 
       - name: Load environment variables
         working-directory: terraform/dev
@@ -49,14 +51,14 @@ jobs:
           set +a
 
       - name: Create Resource Group
-        working-directory: ./terraform/dev
+        working-directory: terraform/dev
         run: |
           az group create \
             -l $TF_VAR_location \
             -n $TF_VAR_state_resource_group_name
 
       - name: Create Storage Account
-        working-directory: ./terraform/dev
+        working-directory: terraform/dev
         run: |
           az storage account create \
             -n $TF_VAR_state_storage_account_name \
@@ -66,7 +68,7 @@ jobs:
             --allow-blob-public-access false
 
       - name: Create STG Container
-        working-directory: ./terraform/dev
+        working-directory: terraform/dev
         run: |
           az storage container create \
             --name $TF_VAR_state_storage_account_container_name \
