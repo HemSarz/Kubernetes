@@ -55,7 +55,7 @@ jobs:
       - name: Verify Plan File
         run: |
           if [ -f git add ./terraform/fic/plans/plan_output.txt ]; then
-          git commit -m "Create Terraform Plan" && git push
+          git commit -m "Backup Terraform Plan" && git push
           fi
           ls -al ./terraform/fic/plans
         
