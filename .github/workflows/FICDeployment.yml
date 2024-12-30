@@ -2,6 +2,10 @@ name: Setup Federated Identity Credential
 'on':
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   DeployOIDC:
     runs-on: ubuntu-latest
