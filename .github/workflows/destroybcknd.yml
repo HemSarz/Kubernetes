@@ -1,9 +1,6 @@
 name: Deploy backend for Terraform State
 'on':
-  workflow_run:
-    workflows: ["Setup Federated Identity Credential"]
-    types:
-      - completed
+  workflow_dispatch:
 
 permissions:
   id-token: write

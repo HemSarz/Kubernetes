@@ -1,6 +1,9 @@
 name: Deploy backend for Terraform State
 'on':
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Setup Federated Identity Credential"]
+    types:
+      - completed
 
 permissions:
   id-token: write
@@ -9,6 +12,7 @@ jobs:
   BackendSetup:
     name: Setup Backend
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
     environment: Dev
     defaults:
       run:
