@@ -1,6 +1,6 @@
 resource "azurerm_storage_account" "stg" {
   name                     = "${var.prefix_stg}stg${var.env}"
-  resource_group_name      = "${var.prefix}-rg-${var.env}"
+  resource_group_name      = azurerm_resource_group.rg-dev.name
   location                 = var.location
   account_tier             = var.account_tier
   account_replication_type = var.account_replication_type
