@@ -1,3 +1,4 @@
+
 name: Setup Federated Identity Credential
 'on':
   workflow_dispatch:
@@ -6,9 +7,9 @@ permissions:
   id-token: write
   contents: read
   actions: write
-  
+
 jobs:
-  DeployOIDC:
+  Deploydev:
     runs-on: ubuntu-latest
     environment: Dev
     steps:
@@ -25,9 +26,6 @@ jobs:
         with:
           creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
 
-      - name: Create PLAN Directory
-        run: mkdir -p ./terraform/dev/plans
-
       - name: Initialize Terraform
         working-directory: ./terraform/dev
         run: terraform init
@@ -38,17 +36,8 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./terraform/dev
-        run: terraform plan -out=./plans/plan.tfplan | tee ./plans/plan_output.txt
+        run: terraform plan
 
-      - name: Debug Plan Files
-        run: ls -al ./terraform/dev/plans
-
-      - name: Plan Summary
-        uses: sgametrio/terraform-summary-action@main
-        with:
-          log-file: ./terraform/dev/plans/plan_output.txt
-          title: "Terraform Plan Summary" 
-
-      - name: Apply FIC Configuration
+      - name: Apply dev Configuration
         working-directory: ./terraform/dev
-        run: terraform apply -auto-approve ./plans/plan.tfplan
+        run: terraform apply -auto-approve
