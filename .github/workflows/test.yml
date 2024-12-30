@@ -36,7 +36,6 @@ jobs:
         shell: bash
     steps:
       - name: Load environment variables
-        working-directory: terraform/dev
         run: |
           set -a
           source .env.backend
