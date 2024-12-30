@@ -1,7 +1,7 @@
 terraform {
   backend "azurerm" {
     resource_group_name  = "tfaz-bcknd-rg"
-    storage_account_name = "bckndstg"
+    storage_account_name = "bckndtfazstg"
     container_name       = "tfstatebcknd"
     key                  = "tfstatebcknd"
   }
