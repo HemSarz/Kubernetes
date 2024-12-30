@@ -1,6 +1,9 @@
-name: TF BACKEND
-'on':
-  workflow_dispatch:
+name: Deploy backend for Terraform State
+on:
+  workflow_run:
+    workflows: ["Setup Federated Identity Credential"]
+    types:
+      - completed
 
 permissions:
   id-token: write
@@ -11,21 +14,14 @@ jobs:
   Build:
     name: Build TF State
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
     environment: Dev
     defaults:
       run:
         shell: bash
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Azure login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
   Deploy:
     name: Deploy TF State to backend
@@ -35,21 +31,36 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./terraform/dev
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: List files (before)
+        run: |
+          pwd
+          ls -al
+
       - name: Load environment variables
+        working-directory: terraform/dev
         run: |
           set -a
           source .env.backend
           set +a
 
+      - name: List files (after env load)
+        run: |
+          pwd
+          ls -al
+
       - name: Create Resource Group
+        working-directory: terraform/dev
         run: |
           az group create \
             -l $TF_VAR_location \
             -n $TF_VAR_state_resource_group_name
 
       - name: Create Storage Account
+        working-directory: terraform/dev
         run: |
           az storage account create \
             -n $TF_VAR_state_storage_account_name \
@@ -59,6 +70,7 @@ jobs:
             --allow-blob-public-access false
 
       - name: Create STG Container
+        working-directory: terraform/dev
         run: |
           az storage container create \
             --name $TF_VAR_state_storage_account_container_name \
