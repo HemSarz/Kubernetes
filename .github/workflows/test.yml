@@ -45,7 +45,7 @@ jobs:
       - name: Create Resource Group
         run: |
           az group create \
-            -l $TF_VAR_location \
+            -l "norwayeast" \
             -n $TF_VAR_state_resource_group_name
 
       - name: Create Storage Account
