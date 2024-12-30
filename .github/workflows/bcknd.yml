@@ -10,10 +10,6 @@ jobs:
     name: Setup Backend
     runs-on: ubuntu-latest
     environment: Dev
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./terraform/dev
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,12 +26,14 @@ jobs:
           set -a
           source .env.backend
           set +a
+        working-directory: ./terraform/dev
 
       - name: Create Resource Group
         run: |
           az group create \
             -l $TF_VAR_location \
             -n $TF_VAR_state_resource_group_name
+        working-directory: ./terraform/dev
 
       - name: Create Storage Account
         run: |
@@ -45,9 +43,11 @@ jobs:
             -l $TF_VAR_location \
             --sku Standard_LRS \
             --allow-blob-public-access false
+        working-directory: ./terraform/dev
 
       - name: Create STG Container
         run: |
           az storage container create \
             --name $TF_VAR_state_storage_account_container_name \
             --account-name $TF_VAR_state_storage_account_name
+        working-directory: ./terraform/dev
