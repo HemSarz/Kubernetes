@@ -34,7 +34,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: terraform/dev
+
     steps:
       - name: checkout
         uses: actions/checkout@v4
