@@ -15,7 +15,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,6 +38,7 @@ jobs:
         working-directory: ./terraform/dev
     steps:
       - name: Load environment variables
+        working-directory: dev
         run: |
           set -a
           source .env.backend
