@@ -1,0 +1,59 @@
+name: Deploy backend for Terraform State
+'on':
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  BackendSetup:
+    name: Setup Backend
+    runs-on: ubuntu-latest
+    environment: Dev
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform/dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Load environment variables
+        run: |
+          if [ -f ".env.backend" ]; then
+            set -a
+            source .env.backend
+            set +a
+          else
+            echo ".env.backend file not found"
+            exit 1
+          fi
+
+      - name: Create Resource Group
+        run: |
+          az group create \
+            -l "$TF_VAR_location" \
+            -n "$TF_VAR_state_resource_group_name"
+
+      - name: Create Storage Account
+        run: |
+          az storage account create \
+            -n "$TF_VAR_state_storage_account_name" \
+            -g "$TF_VAR_state_resource_group_name" \
+            -l "$TF_VAR_location" \
+            --sku Standard_LRS \
+            --allow-blob-public-access false
+
+      - name: Create STG Container
+        run: |
+          az storage container create \
+            --name "$TF_VAR_state_storage_account_container_name" \
+            --account-name "$TF_VAR_state_storage_account_name"
