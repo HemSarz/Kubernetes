@@ -2,14 +2,9 @@ name: TF BACKEND
 'on':
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-  actions: write
-
 jobs:
   AzLogin:
-    name: Build TF State
+    name: AzLogin
     runs-on: ubuntu-latest
     environment: Dev
     defaults:
