@@ -30,7 +30,7 @@ jobs:
         run: |
           if [ -f ".env.backend" ]; then
             set -a
-            source .env.backend
+            source ./terraform/dev/.env.backend
             set +a
           else
             echo ".env.backend file not found"
