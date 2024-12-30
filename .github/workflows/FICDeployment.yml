@@ -25,7 +25,11 @@ jobs:
         run: pwd && ls -al ./terraform/fic
         
       - name: Create PLAN Directory
-        run: mkdir -p ./terraform/fic/plans
+        run: |
+          mkdir -p ./terraform/fic/plans
+          git add ./terraform/fic/plans
+          git commit -m "Create PLAN Directory"
+          git diff --cached --quiet || (git commit -m "Create PLAN Directory" && git push)
 
       - name: Initialize Terraform
         working-directory: ./terraform/fic
