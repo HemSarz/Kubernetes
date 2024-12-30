@@ -34,9 +34,11 @@ jobs:
           if [ ! -d "./terraform/fic/plans" ]; then
           mkdir -p ./terraform/fic/plans && touch ./terraform/fic/plans/.gitkeep
           git add ./terraform/fic/plans/.gitkeep
-          git commit -m "Create PLAN Directory"
-          git diff --cached --quiet || (git commit -m "Create PLAN Directory" && git push)
+          git commit -m "Create PLAN Directory" && git push
           fi
+
+      - name: Verify Plan Directory
+        run: ls -al ./terraform/fic/plans
 
       - name: Initialize Terraform
         working-directory: ./terraform/fic
