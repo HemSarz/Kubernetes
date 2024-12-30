@@ -26,17 +26,14 @@ jobs:
 
       - name: Initialize Terraform
         working-directory: ./terraform/fic
-
         run: terraform init
 
       - name: Validate Terraform Code
         working-directory: ./terraform/fic
-
         run: terraform validate
 
       - name: Terraform Plan
         working-directory: ./terraform/fic
-
         run: terraform plan -out=./plans/plan.tfplan | tee ./plans/plan_output.txt
 
       - name: Debug Plan Files
@@ -46,9 +43,8 @@ jobs:
         uses: sgametrio/terraform-summary-action@main
         with:
           log-file: ./terraform/fic/plans/plan_output.txt
-          title: "Terraform Plan Summary" 
+          title: "Terraform Plan Summary"
 
       - name: Apply FIC Configuration
         working-directory: ./terraform/fic
-
         run: terraform apply -auto-approve ./plans/plan.tfplan
