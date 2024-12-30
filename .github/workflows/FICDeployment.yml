@@ -52,9 +52,13 @@ jobs:
         working-directory: ./terraform/fic
         run: terraform plan -out=./plans/plan.tfplan | tee ./plans/plan_output.txt
 
-      - name: Debug Plan Files
-        run: ls -al ./terraform/fic/plans
-
+      - name: Verify Plan File
+        run: |
+          if [ -f git add ./terraform/fic/plans/plan_output.txt ]; then
+          git commit -m "Create Terraform Plan" && git push
+          fi
+          ls -al ./terraform/fic/plans
+        
       - name: Plan Summary
         uses: sgametrio/terraform-summary-action@main
         with:
