@@ -38,7 +38,6 @@ jobs:
         working-directory: ./terraform/dev
     steps:
       - name: Load environment variables
-        working-directory: dev
         run: |
           set -a
           source .env.backend
