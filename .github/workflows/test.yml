@@ -40,7 +40,7 @@ jobs:
       - name: Load environment variables
         run: |
           set -a
-          source terraform/dev/.env.backend
+          source .env.backend
           set +a
 
       - name: Create Resource Group
