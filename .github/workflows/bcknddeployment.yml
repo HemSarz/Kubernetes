@@ -1,7 +1,7 @@
 name: Deploy backend for Terraform State
 'on':
   workflow_run:
-    workflows: ["Setup Federated Identity Credential"]
+    workflows: [Setup Federated Identity Credential]
     types:
       - completed
 
@@ -38,20 +38,20 @@ jobs:
       - name: Create Resource Group
         run: |
           az group create \
-            -l "$TF_VAR_location" \
-            -n "$TF_VAR_state_resource_group_name"
+            -l $TF_VAR_location \
+            -n $TF_VAR_state_resource_group_name
 
       - name: Create Storage Account
         run: |
           az storage account create \
-            -n "$TF_VAR_state_storage_account_name" \
-            -g "$TF_VAR_state_resource_group_name" \
-            -l "$TF_VAR_location" \
+            -n $TF_VAR_state_storage_account_name \
+            -g $TF_VAR_state_resource_group_name \
+            -l $TF_VAR_location \
             --sku Standard_LRS \
             --allow-blob-public-access false
 
       - name: Create STG Container
         run: |
           az storage container create \
-            --name "$TF_VAR_state_storage_account_container_name" \
-            --account-name "$TF_VAR_state_storage_account_name"
+            --name $TF_VAR_state_storage_account_container_name \
+            --account-name $TF_VAR_state_storage_account_name
