@@ -53,6 +53,7 @@ jobs:
         run: terraform plan -out=./plans/plan.tfplan | tee ./plans/plan_output.txt
 
       - name: Verify Plan File
+        working-directory: ./terraform/fic
         run: |
           if [ -f git add ./terraform/fic/plans/plan_output.txt ]; then
           git commit -m "Backup Terraform Plan" && git push
