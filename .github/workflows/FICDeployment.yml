@@ -1,6 +1,12 @@
 name: Setup Federated Identity Credential
-'on':
+
+on:
   workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  actions: write
 
 jobs:
   DeployOIDC:
@@ -16,10 +22,40 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Az login
-        uses: azure/login@v2.2.0
+      - name: Az login via OIDC
+        uses: azure/login@v2
         with:
-          creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Verify WorkingDir
+        run: pwd && ls -al ./terraform/fic
+
+      - name: GH Identity
+        run: |
+          git config --global user.email "${{ secrets.GHUSEREMAIL }}"
+          git config --global user.name "${{ secrets.GHUSER }}"
+
+      - name: Create PLAN Directory (if missing)
+        run: |
+          if [ ! -d "./terraform/fic/plans" ]; then
+            mkdir -p ./terraform/fic/plans && touch ./terraform/fic/plans/.gitkeep
+            git add ./terraform/fic/plans/.gitkeep
+            git commit -m "Create PLAN Directory" && git push
+          fi
+
+      - name: Generate Plan Name
+        id: generate_plan_name
+        run: |
+          PLAN_NAME=$(TZ=Europe/Oslo date +%Y-%m-%d_%H-%M-%S)
+          echo "::set-output name=plan_name::$PLAN_NAME"
+
+      - name: Build Plan File Path
+        id: build_plan_path
+        run: |
+          PLAN_FILE_PATH=./terraform/fic/plans/${{ steps.generate_plan_name.outputs.plan_name }}.tfplan
+          echo "::set-output name=plan_file_path::$PLAN_FILE_PATH"
 
       - name: Initialize Terraform
         working-directory: ./terraform/fic
@@ -27,18 +63,29 @@ jobs:
 
       - name: Validate Terraform Code
         working-directory: ./terraform/fic
-        run: terraform validate
+        run: terraform validate || exit 1
 
       - name: Terraform Plan
         working-directory: ./terraform/fic
-        run: terraform plan | tee fic_plan_output.txt
-        
+        run: terraform plan -out=${{ steps.build_plan_path.outputs.plan_file_path }} | tee ./terraform/fic/plans/plan_output.txt
+
+      - name: Commit and Push Plan Files
+        working-directory: ./terraform/fic
+        run: |
+          git add ./terraform/fic/plans/plan_output.txt ${{ steps.build_plan_path.outputs.plan_file_path }}
+          git commit -m "Add Terraform Plan ${{ steps.generate_plan_name.outputs.plan_name }}" || true
+          git push origin main || true
+
+      - name: Verify Plan Directory
+        working-directory: ./terraform/fic
+        run: ls -al ./terraform/fic/plans
+
       - name: Plan Summary
         uses: sgametrio/terraform-summary-action@main
         with:
-          log-file: fic_plan_output.txt
+          log-file: ./terraform/fic/plans/plan_output.txt
           title: "Terraform Plan Summary"
 
       - name: Apply FIC Configuration
         working-directory: ./terraform/fic
-        run: terraform apply -auto-approve ./plans/plan.tfplan
+        run: terraform apply -auto-approve ${{ steps.build_plan_path.outputs.plan_file_path }}
