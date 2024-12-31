@@ -31,13 +31,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./terraform/fic
-        run: terraform plan -out=./fic/plan.tfplan | tee ./fic/fic_plan_output.txt
-
-      - name: Plan Summary
-        uses: sgametrio/terraform-summary-action@main
-        with:
-          log-file: ./fic/fic_plan_output.txt
-          title: "Terraform Plan Summary"
+        run: terraform plan 
 
       - name: Apply FIC Configuration
         working-directory: ./terraform/fic
