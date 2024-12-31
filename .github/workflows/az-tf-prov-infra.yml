@@ -1,0 +1,52 @@
+name: Provision Azure Infrastructure Resources [ Terraform ]
+
+on:
+  workflow_dispatch:
+
+jobs:
+  DeployInfra:
+    runs-on: ubuntu-latest
+    environment: Dev
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3.1.2
+        with:
+          terraform_version: latest
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Create PLAN Directory
+        run: mkdir -p ./terraform/dev/infraplans
+
+      - name: Initialize Terraform
+        working-directory: ./terraform/dev
+        run: terraform init
+
+      - name: Validate Terraform Code
+        working-directory: ./terraform/dev
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ./terraform/dev
+        run: terraform plan -out=./infraplans/plan.tfplan | tee ./infraplans/plan_output.txt
+
+      - name: Debug Plan Files
+        run: ls -al ./terraform/dev/plans
+
+      - name: Plan Summary
+        uses: sgametrio/terraform-summary-action@main
+        with:
+          log-file: ./terraform/dev/infraplans/plan_output.txt
+          title: "Terraform Plan Summary"
+
+      - name: Apply FIC Configuration
+        working-directory: ./terraform/dev
+        run: terraform apply -auto-approve ./infraplans/plan.tfplan

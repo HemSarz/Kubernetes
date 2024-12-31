@@ -1,0 +1,38 @@
+name: Establish Federated Identity Credentials for Secure Authentication [ OIDC ]
+'on':
+  workflow_dispatch:
+
+jobs:
+  DeployOIDC:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3.1.2
+        with:
+          terraform_version: latest
+
+      - name: Az login
+        uses: azure/login@v2.2.0
+        with:
+          creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+
+      - name: Initialize Terraform
+        working-directory: ./terraform/fic
+        run: terraform init
+
+      - name: Validate Terraform Code
+        working-directory: ./terraform/fic
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ./terraform/fic
+        run: terraform plan 
+
+      - name: Apply FIC Configuration
+        working-directory: ./terraform/fic
+        run: terraform apply -auto-approve
