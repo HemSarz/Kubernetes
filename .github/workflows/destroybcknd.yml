@@ -1,4 +1,4 @@
-name: Destroy backend for Terraform State
+name: Dismantle Terraform State Backend Configuration
 'on':
   workflow_dispatch:
 

@@ -1,4 +1,4 @@
-name: Deploy backend for Terraform State
+name: Set Up Reliable Terraform State Backend for Infrastructure Management
 'on':
   workflow_run:
     workflows: ["Setup Federated Identity Credential"]
