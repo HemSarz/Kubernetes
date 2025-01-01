@@ -1,4 +1,4 @@
-name: Establish Federated Identity Credentials for Secure Authentication [ OIDC ]
+name: Establish Federated Identity Credentials for Secure Authentication
 'on':
   workflow_dispatch:
 
