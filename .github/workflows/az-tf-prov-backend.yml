@@ -1,7 +1,7 @@
 name: Set Up Reliable Terraform State Backend for Infrastructure Management
 'on':
   workflow_run:
-    workflows: ["Setup Federated Identity Credential"]
+    workflows: ["Establish Federated Identity Credentials for Secure Authentication [ OIDC ]"]
     types:
       - completed
 
