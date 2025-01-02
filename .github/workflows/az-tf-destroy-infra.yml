@@ -49,3 +49,14 @@ jobs:
       - name: Terraform Destroy
         working-directory: ./terraform/dev
         run: terraform destroy -auto-approve
+
+      - name: Destroy NetworkWatcherRG
+        uses: azure/cli@v2.1.0
+        with:
+            azcliversion: latest
+            inlineScript: |
+                set -a
+                source .env.backend
+                az network watcher delete \
+                    --name networkWatcherRG \
+                    --resource-group $TF_VAR_state_resource_group_name
