@@ -1,4 +1,4 @@
-name: Provision Azure Infrastructure Resources [ Terraform | CiCD | Azure | GHA]
+name: Provision Azure Infrastructure Resources
 
 on:
   workflow_dispatch:
