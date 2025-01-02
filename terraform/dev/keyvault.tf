@@ -6,7 +6,6 @@ resource "azurerm_key_vault" "kv" {
   tenant_id                = data.azurerm_client_config.current.tenant_id
   purge_protection_enabled = false
 
-
   tags = {
     Environment = var.env
   }
@@ -19,7 +18,10 @@ resource "azurerm_key_vault_access_policy" "spn" {
   key_vault_id = azurerm_key_vault.kv.id
 
   secret_permissions = [
-    "Get", "List", "Set"
+    "Get",
+    "List",
+    "Set",
+    "Delete"
   ]
 }
 
