@@ -28,7 +28,7 @@ resource "azurerm_key_vault_access_policy" "name" {
 
 resource "azurerm_key_vault_access_policy" "spn" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azuread_service_principal.tfazspn.object_id
+  object_id    = data.azuread_service_principal.tfazspnName.object_id
   key_vault_id = azurerm_key_vault.kv.id
 
   secret_permissions = [

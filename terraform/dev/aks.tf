@@ -1,5 +1,5 @@
 resource "random_password" "akspass" {
-  length           = 12
+  length           = 14
   special          = true
   override_special = "_%@"
 }
