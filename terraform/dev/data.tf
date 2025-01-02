@@ -8,10 +8,6 @@ data "azuread_application" "tfazspn" {
 
 data "azuread_service_principal" "tfazspnName" {
   display_name = "tfazspn"
-
-}
-data "azuread_service_principal" "tfazspn" {
-  object_id = data.azuread_service_principal.tfazspnName.object_id
 }
 
 #Get the current version of the Kubernetes service
