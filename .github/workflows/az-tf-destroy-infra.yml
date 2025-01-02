@@ -44,7 +44,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./terraform/dev
-        run: terraform plan -destroy
+        run: terraform plan -destroy -lock=false
 
       - name: Terraform Destroy
         working-directory: ./terraform/dev
