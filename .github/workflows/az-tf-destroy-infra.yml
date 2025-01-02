@@ -50,19 +50,15 @@ jobs:
         working-directory: ./terraform/dev
         run: terraform destroy -auto-approve
 
-      - name: Destroy NetworkWatcherRG
+      - name: Destroy selected Resource Group from JSON
         uses: azure/cli@v2.1.0
         with:
           azcliversion: latest
           inlineScript: |
-            Set-Location "${{ github.workspace }}/terraform/dev"
-            . ./.env.backend
-            $resourceGroup = $env:TF_VAR_state_resource_group_name
-            Write-Host "Deleting Resource Group: $resourceGroup"
-            $VerifyRGExists = az group show --name $resourceGroup --query "name" -o tsv
-            if ($VerifyRGExists) {
-                az group delete --name $resourceGroup --yes --no-wait
-                Write-Host "Resource Group $resourceGroup deleted."
-            } else {
-                Write-Host "Resource Group $resourceGroup does not exist. No deletion required."
-            }
+            NTWRKRG=$(jq -r '.ntwrkrg' rgs.json)
+            if [[ -z "$NTWRKRG" ]]; then
+              echo "Error: 'ntwrkrg' not found in rgs.json"
+              exit 1
+            fi
+            echo "Deleting resource group: $NTWRKRG"
+            az group delete --name "$NTWRKRG" --yes --no-wait
