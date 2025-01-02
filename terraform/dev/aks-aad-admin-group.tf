@@ -7,5 +7,4 @@ resource "azuread_group" "aks-admin-group" {
 resource "azuread_group_member" "aks-admin-group-member" {
   group_object_id  = azuread_group.aks-admin-group.id
   member_object_id = data.azuread_user.gb.object_id
-
 }
