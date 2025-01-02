@@ -15,7 +15,7 @@ jobs:
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_USE_OIDC: true
-      
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
@@ -32,9 +32,14 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Initialize Terraform
-        working-directory: ./terraform/dev
-        run: terraform init
+      - name: Terraform init
+        id: init
+        run: |
+          set -a 
+          source .env.backend
+          terraform init \
+            -backend-config="resource_group_name=$TF_VAR_state_resource_group_name" \
+            -backend-config="storage_account_name=$TF_VAR_state_storage_account_name"
 
       - name: Validate Terraform Code
         working-directory: ./terraform/dev
