@@ -3,6 +3,9 @@ name: Provision Azure Infrastructure Resources [ Terraform | CiCD | Azure | GHA]
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+
 jobs:
   DeployInfra:
     runs-on: ubuntu-latest
