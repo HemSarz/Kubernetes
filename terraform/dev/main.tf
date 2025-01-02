@@ -1,6 +1,13 @@
+resource "random_string" "rgNameString" {
+  length  = 4
+  special = false
+  upper   = false
+
+}
+
 # Resource group
 resource "azurerm_resource_group" "rg-dev" {
-  name     = "${var.prefix}-${var.rgName}-${var.env}"
+  name     = "${var.prefix}-${var.rgName}-${random.rgNameString.result}-${var.env}"
   location = var.location
 
   tags = {
