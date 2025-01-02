@@ -51,6 +51,7 @@ jobs:
         run: terraform destroy -auto-approve
 
       - name: Destroy NetworkWatcherRG
+        working-directory: ./terraform/dev
         uses: azure/cli@v2.1.0
         with:
             azcliversion: latest
