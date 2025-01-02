@@ -62,9 +62,13 @@ jobs:
               exit 1
             fi
             echo "Checking for resource group: $NTWRKRG"
-            if az group show --name "$NTWRKRG"; then
+            if az group show \
+            --name "$NTWRKRG"; then
               echo "Resource group exists, deleting: $NTWRKRG"
-              az group delete --name "$NTWRKRG" --yes --no-wait
+              az group delete \
+              --name "$NTWRKRG" \
+              --yes \
+              --no-wait
             else
               echo "Resource group $NTWRKRG does not exist."
             fi
