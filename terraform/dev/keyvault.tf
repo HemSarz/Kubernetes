@@ -6,7 +6,6 @@ resource "azurerm_key_vault" "kv" {
   tenant_id                = data.azurerm_client_config.current.tenant_id
   purge_protection_enabled = false
 
-
   tags = {
     Environment = var.env
   }
