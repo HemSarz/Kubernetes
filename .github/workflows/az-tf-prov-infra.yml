@@ -50,6 +50,6 @@ jobs:
         working-directory: ./terraform/dev
         run: terraform plan
 
-      - name: Apply FIC Configuration
+      - name: Terraform Apply
         working-directory: ./terraform/dev
         run: terraform apply -auto-approve
