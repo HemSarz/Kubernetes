@@ -1,5 +1,11 @@
+resource "random_string" "stgNameNC" {
+  length  = 4
+  special = false
+  upper   = false
+}
+
 resource "azurerm_storage_account" "stg" {
-  name                     = "${var.prefix_stg}stg${var.env}"
+  name                     = "${var.prefix_stg}stg${var.env}${random_string.stgNameNC.result}"
   resource_group_name      = azurerm_resource_group.rg-dev.name
   location                 = var.location
   account_tier             = var.account_tier
