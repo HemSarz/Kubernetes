@@ -33,6 +33,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform init
+        working-directory: ./terraform/dev
         id: init
         run: |
           set -a 
