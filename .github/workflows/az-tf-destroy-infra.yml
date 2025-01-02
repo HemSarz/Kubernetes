@@ -55,7 +55,8 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            NTWRKRG=$(jq -r '.ntwrkrg' rgs.json)
+            ls -l ./terraform/dev
+            NTWRKRG=$(jq -r '.ntwrkrg' ./terraform/dev/rgs.json)
             if [[ -z "$NTWRKRG" ]]; then
               echo "Error: 'ntwrkrg' not found in rgs.json"
               exit 1
