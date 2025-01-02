@@ -46,9 +46,13 @@ jobs:
         working-directory: ./terraform/dev
         run: terraform validate
 
+      - name: Terraform Unlock Force
+        working-directory: ./terraform/dev
+        run: terraform force-unlock -force d649960b-9a1c-6faa-1d38-1465e408f206
+
       - name: Terraform Plan
         working-directory: ./terraform/dev
-        run: terraform plan -lock=false
+        run: terraform plan
 
       - name: Terraform Apply
         working-directory: ./terraform/dev
