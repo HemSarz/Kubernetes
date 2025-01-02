@@ -48,7 +48,7 @@ jobs:
 
       - name: Terraform Destroy
         working-directory: ./terraform/dev
-        run: terraform destroy -auto-approve
+        run: terraform destroy -auto-approve -lock=false
 
       - name: Destroy selected Resource Group from JSON
         uses: azure/cli@v2.1.0
