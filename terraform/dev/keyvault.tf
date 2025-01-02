@@ -10,8 +10,8 @@ resource "azurerm_key_vault" "kv" {
     Environment = var.env
   }
 }
-
 #### Access Policy
+/*
 resource "azurerm_key_vault_access_policy" "name" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azurerm_client_config.current.object_id
@@ -24,6 +24,7 @@ resource "azurerm_key_vault_access_policy" "name" {
     "Set"
   ]
 }
+*/
 
 resource "azurerm_key_vault_access_policy" "spn" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
@@ -36,6 +37,7 @@ resource "azurerm_key_vault_access_policy" "spn" {
     "Set"
   ]
 }
+
 
 ### Secrets
 resource "azurerm_key_vault_secret" "aks-sec-win-node" {
