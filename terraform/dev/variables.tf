@@ -128,7 +128,7 @@ variable "node_count" {
 variable "node_vm_size" {
   description = "VM size for the nodes in the AKS cluster"
   type        = string
-  default     = "Standard_B1"
+  default     = "Standard_B2s"
 }
 
 variable "load_balancer_sku" {
