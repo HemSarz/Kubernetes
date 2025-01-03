@@ -1,9 +1,3 @@
-#NodeResourceGroup
-resource "azurerm_resource_group" "aks-node-rg" {
-  name     = "${var.prefix}-${var.aksname}-node-rg-${var.env}"
-  location = var.location
-}
-
 resource "random_password" "akspass" {
   length           = 14
   special          = true
@@ -16,7 +10,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = azurerm_resource_group.rg-dev.name
   dns_prefix          = "${var.prefix}-${var.aksname}-${var.env}"
   kubernetes_version  = data.azurerm_kubernetes_service_versions.current.latest_version
-  node_resource_group = azurerm_resource_group.aks-node-rg.name
+  #node_resource_group = azurerm_resource_group.aks-node-rg.name
 
   identity {
     type = "SystemAssigned"
@@ -28,6 +22,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
     node_count     = var.node_count
     vm_size        = var.node_vm_size
     vnet_subnet_id = azurerm_subnet.aks_subnet.id
+
+    os_disk_type = var.os_disk_type
+    os_sku = 
   }
 
 

@@ -128,7 +128,7 @@ variable "node_count" {
 variable "node_vm_size" {
   description = "VM size for the nodes in the AKS cluster"
   type        = string
-  default     = "Standard_B2s"
+  default     = "Standard_B1"
 }
 
 variable "load_balancer_sku" {
@@ -141,6 +141,12 @@ variable "default_node_pool_name" {
   description = "Name of the default node pool"
   type        = string
   default     = "primary"
+}
+
+variable "os_disk_type" {
+  description = "OS disk Type"
+  type        = number
+  default     = "Standard_HDD"
 }
 
 # Azure container registry
