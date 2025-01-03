@@ -1,4 +1,4 @@
-resource "azurerm_container_registry" "acr" {
+/*resource "azurerm_container_registry" "acr" {
   name                = var.acr_name
   resource_group_name = azurerm_resource_group.rg-dev.name
   location            = azurerm_resource_group.rg-dev.location
@@ -8,3 +8,4 @@ resource "azurerm_container_registry" "acr" {
     Environment = var.env
   }
 }
+*/
