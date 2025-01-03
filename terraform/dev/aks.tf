@@ -24,11 +24,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     vnet_subnet_id = azurerm_subnet.aks_subnet.id
   }
 
-  windows_profile {
-    admin_username = var.admin_username
-    admin_password = azurerm_key_vault_secret.aks-sec-win-node.value
-  }
-
   linux_profile {
     admin_username = var.admin_username
     ssh_key {
