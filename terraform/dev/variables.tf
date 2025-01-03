@@ -143,12 +143,6 @@ variable "default_node_pool_name" {
   default     = "primary"
 }
 
-variable "os_disk_type" {
-  description = "OS disk Type"
-  type        = number
-  default     = "Standard_HDD"
-}
-
 # Azure container registry
 variable "acr_name" {
   description = "Name of the Azure Container Registry"

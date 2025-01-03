@@ -22,11 +22,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     node_count     = var.node_count
     vm_size        = var.node_vm_size
     vnet_subnet_id = azurerm_subnet.aks_subnet.id
-
-    os_disk_type = var.os_disk_type
-    os_sku = 
   }
-
 
   windows_profile {
     admin_username = var.admin_username
