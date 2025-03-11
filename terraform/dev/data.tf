@@ -18,6 +18,6 @@ data "azurerm_kubernetes_service_versions" "current" {
 
 # AKSAdminGroupMembers
 
-data "azuread_user" "gb" {
-  user_principal_name = "gb@hemensarzalihotmail.onmicrosoft.com"
+data "azuread_user" "user" {
+  user_principal_name = "USERUPM"
 }
